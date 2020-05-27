@@ -62,7 +62,7 @@ public class ExecCMD {
 			return "Erreur: pas de répertoire fourni";
 		}
 		
-		String firstCmdToRun = "mkdir "+finalFolder;
+		String firstCmdToRun = "mkdir -p "+finalFolder;
 		String secondCmdToRun = "sudo chown ftpuser:ftpuser "+finalFolder;
 		
 		try {
