@@ -20,9 +20,28 @@ import org.springframework.web.bind.annotation.RestController;
 public class ExecCMD {
 	ProcessBuilder processBuilder = new ProcessBuilder();
 	
-	@PostMapping(value = "/mkdir")
-	public void createDirectory(@RequestParam String directory) {
-		processBuilder.command("bash", "-c", "mkdir /home/ftpuser/ftp/"+directory);
+	@PostMapping(value = "/initUserDir")
+	public String initUserDirectory(@RequestParam String userName) {
+		
+		String result ="";
+		
+		String firstCmdToRun = "mkdir /home/ftpuser/ftp/"+userName;
+		String secondCmdToRun = "sudo chown ftpuser:ftpuser /home/ftpuser/ftp/"+userName;
+		
+		try {
+			executeCommande(firstCmdToRun);
+			executeCommande(secondCmdToRun);
+			result = "Répertoire créé";
+		}catch(Exception e) {
+			e.printStackTrace();
+			result ="Erreur: Répertoire non créé";
+		}
+
+		return result;
+	}
+	
+	public void executeCommande(String commande) {
+		processBuilder.command("bash", "-c", commande);
 		try {
 			Process p = processBuilder.start();
 			System.out.println("command executed: "+p.getOutputStream());
@@ -30,6 +49,7 @@ public class ExecCMD {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 	}
 
 }
