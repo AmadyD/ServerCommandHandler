@@ -22,7 +22,7 @@ public class ExecCMD {
 	
 	@PostMapping(value = "/mkdir")
 	public void createDirectory(@RequestParam String directory) {
-		processBuilder.command("bash", "-c", "mkdir /"+directory);
+		processBuilder.command("bash", "-c", "mkdir /home/ftpuser/ftp/"+directory);
 		try {
 			Process p = processBuilder.start();
 			System.out.println("command executed: "+p.getOutputStream());
