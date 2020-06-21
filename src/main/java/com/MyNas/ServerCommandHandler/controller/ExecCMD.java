@@ -88,7 +88,7 @@ public class ExecCMD {
 			return "Erreur: pas de répertoire fourni";
 		}
 		
-		String firstCmdToRun = "rm -rf"+finalFolder;
+		String firstCmdToRun = "rm -rf "+finalFolder;
 		
 		try {
 			executeCommande(firstCmdToRun);
