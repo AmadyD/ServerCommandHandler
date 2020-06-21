@@ -99,6 +99,33 @@ public class ExecCMD {
 		
 		return result;
 	}
+
+	@PostMapping(value = "/removeFile")
+	public String removeFile(@RequestParam String userName, @RequestParam List<String> folders,
+			@RequestParam String fileName,@RequestParam String extension) {
+		
+		String result ="KO";
+		String finalFolder = "/home/ftpuser/ftp/"+userName;
+		String file = fileName+"."+extension;
+		if(! folders.isEmpty()) {
+			for(String folder : folders) {
+				finalFolder = finalFolder+"/"+folder;
+			}
+		}else {
+			return "Erreur: pas de répertoire fourni";
+		}
+		
+		String firstCmdToRun = "rm "+finalFolder+"/"+file;
+		
+		try {
+			executeCommande(firstCmdToRun);
+			result = "OK";
+		}catch(Exception e) {
+			e.printStackTrace();	
+		}
+		
+		return result;
+	}
 	
 	
 	/*
