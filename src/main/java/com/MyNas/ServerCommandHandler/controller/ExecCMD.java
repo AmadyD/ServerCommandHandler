@@ -28,7 +28,7 @@ public class ExecCMD {
 	@PostMapping(value = "/initUserDir")
 	public String initUserDirectory(@RequestParam String userName) {
 		
-		String result ="";
+		String result ="KO";
 		
 		String firstCmdToRun = "mkdir /home/ftpuser/ftp/"+userName;
 		String secondCmdToRun = "sudo chown ftpuser:ftpuser /home/ftpuser/ftp/"+userName;
@@ -36,10 +36,9 @@ public class ExecCMD {
 		try {
 			executeCommande(firstCmdToRun);
 			executeCommande(secondCmdToRun);
-			result = "Répertoire créé";
+			result = "OK";
 		}catch(Exception e) {
 			e.printStackTrace();
-			result ="Erreur: Répertoire non créé";
 		}
 
 		return result;
@@ -52,7 +51,7 @@ public class ExecCMD {
 	@PostMapping(value = "/addFolder")
 	public String addSubFolder(@RequestParam String userName, @RequestParam List<String> folders) {
 		
-		String result ="";
+		String result ="KO";
 		String finalFolder = "/home/ftpuser/ftp/"+userName;
 		if(! folders.isEmpty()) {
 			for(String folder : folders) {
@@ -68,10 +67,34 @@ public class ExecCMD {
 		try {
 			executeCommande(firstCmdToRun);
 			executeCommande(secondCmdToRun);
-			result = "Répertoire créé";
+			result = "OK";
 		}catch(Exception e) {
-			e.printStackTrace();
-			result ="Erreur: Répertoire non créé";
+			e.printStackTrace();	
+		}
+		
+		return result;
+	}
+	
+	@PostMapping(value = "/removeFolder")
+	public String removeFolder(@RequestParam String userName, @RequestParam List<String> folders) {
+		
+		String result ="KO";
+		String finalFolder = "/home/ftpuser/ftp/"+userName;
+		if(! folders.isEmpty()) {
+			for(String folder : folders) {
+				finalFolder = finalFolder+"/"+folder;
+			}
+		}else {
+			return "Erreur: pas de répertoire fourni";
+		}
+		
+		String firstCmdToRun = "rm -rf"+finalFolder;
+		
+		try {
+			executeCommande(firstCmdToRun);
+			result = "OK";
+		}catch(Exception e) {
+			e.printStackTrace();	
 		}
 		
 		return result;
@@ -82,14 +105,13 @@ public class ExecCMD {
 	 *  Permet d'exécuter la commande passer en argument au niveau du serveur linux
 	 */
 	
-	public void executeCommande(String commande) {
+	public void executeCommande(String commande) throws IOException {
 		processBuilder.command("bash", "-c", commande);
 		try {
 			Process p = processBuilder.start();
 			System.out.println("command executed: "+p.getOutputStream());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw(e);
 		}
 
 	}
