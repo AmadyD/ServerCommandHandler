@@ -116,7 +116,7 @@ public class ExecCMD {
 		}
 		
 		String firstCmdToRun = "rm "+finalFolder+"/"+file;
-		
+		System.out.println(firstCmdToRun);
 		try {
 			executeCommande(firstCmdToRun);
 			result = "OK";
